@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>匠合咨询 · 高维合伙 · 文明觉醒 · 以终为始</title>
+<style>
+  :root {
+    --gold-50: #FFFBEB; --gold-100: #FEF3C7; --gold-200: #FDE68A; --gold-300: #FCD34D;
+    --gold-400: #FBBF24; --gold-500: #F59E0B; --gold-600: #D97706; --gold-700: #B45309;
+    --gold-800: #92400E; --gold-900: #78350F; --cream: #FFFBF0; --warm-white: #FFFDF7;
+    --charcoal: #2C2416; --deep-brown: #1A1612;
+    --kimi-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-fast: 120ms; --t-normal: 200ms; --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--kimi-font-sans); color: var(--charcoal); line-height: 1.6; background: var(--warm-white); overflow-x: hidden; }
+
+  .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,253,247,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(245,158,11,0.12); padding: 0 28px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-brand { font-size: 18px; font-weight: 600; color: var(--gold-800); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+  .nav-brand svg { width: 26px; height: 26px; color: var(--gold-600); }
+  .nav-links { display: flex; gap: 6px; align-items: center; }
+  .nav-link { padding: 8px 16px; text-decoration: none; color: var(--gold-800); font-size: 14px; border-radius: 8px; transition: all var(--t-fast) var(--ease-standard); cursor: pointer; border: none; background: none; font-family: inherit; font-weight: 500; }
+  .nav-link:hover { color: var(--gold-900); background: rgba(245,158,11,0.08); }
+  .nav-link.active { color: var(--gold-900); background: rgba(245,158,11,0.12); font-weight: 600; }
+  .mobile-menu-btn { display: none; background: none; border: none; padding: 8px; cursor: pointer; color: var(--gold-700); }
+
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 24px 80px; background: linear-gradient(160deg, var(--warm-white) 0%, var(--gold-50) 30%, var(--gold-100) 70%, var(--gold-200) 100%); position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -20%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(251,191,36,0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -10%; left: -5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; background: rgba(245,158,11,0.1); color: var(--gold-700); border-radius: 100px; font-size: 13px; margin-bottom: 36px; font-weight: 600; border: 1px solid rgba(245,158,11,0.15); position: relative; z-index: 1; }
+  .hero-badge svg { width: 16px; height: 16px; }
+  .hero h1 { font-size: clamp(34px, 5.5vw, 60px); font-weight: 600; line-height: 1.12; margin-bottom: 24px; color: var(--charcoal); position: relative; z-index: 1; text-shadow: 0 2px 20px rgba(251,191,36,0.1); }
+  .hero h1 span { color: var(--gold-700); }
+  .hero-subtitle { font-size: clamp(17px, 2.2vw, 21px); color: var(--gold-800); max-width: 660px; margin-bottom: 48px; line-height: 1.8; position: relative; z-index: 1; font-weight: 400; }
+  .hero-subtitle strong { color: var(--gold-900); font-weight: 600; }
+  .hero-stats { display: flex; gap: 56px; margin-bottom: 48px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; }
+  .stat-item { text-align: center; }
+  .stat-number { font-size: 40px; font-weight: 600; color: var(--gold-700); line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat-label { font-size: 14px; color: var(--gold-600); margin-top: 8px; font-weight: 500; }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; }
+  .btn { padding: 14px 32px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all var(--t-fast) var(--ease-standard); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; border: none; font-family: inherit; position: relative; overflow: hidden; }
+  .btn-primary { background: linear-gradient(135deg, var(--gold-500) 0%, var(--gold-600) 100%); color: white; box-shadow: 0 4px 20px rgba(245,158,11,0.3); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,158,11,0.4); }
+  .btn-secondary { background: white; color: var(--gold-700); border: 2px solid var(--gold-300); box-shadow: 0 2px 12px rgba(251,191,36,0.1); }
+  .btn-secondary:hover { background: var(--gold-50); border-color: var(--gold-400); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(251,191,36,0.15); }
+  .btn svg { width: 18px; height: 18px; }
+
+  .section { padding: 100px 24px; max-width: 1200px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 64px; }
+  .section-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gold-600); font-weight: 600; margin-bottom: 16px; letter-spacing: 0.05em; }
+  .section-tag svg { width: 16px; height: 16px; }
+  .section-title { font-size: clamp(26px, 3.2vw, 38px); font-weight: 600; margin-bottom: 18px; color: var(--charcoal); }
+  .section-desc { font-size: 17px; color: var(--gold-700); max-width: 640px; margin: 0 auto; line-height: 1.8; font-weight: 400; }
+
+  .awakening-questions { background: linear-gradient(160deg, var(--deep-brown) 0%, #2C1810 50%, var(--charcoal) 100%); color: var(--gold-100); padding: 120px 24px; position: relative; overflow: hidden; }
+  .awakening-questions::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 600px; height: 300px; background: radial-gradient(ellipse, rgba(251,191,36,0.08) 0%, transparent 70%); pointer-events: none; }
+  .awakening-questions .section-title { color: var(--gold-200); }
+  .awakening-questions .section-desc { color: rgba(251,191,36,0.6); }
+  .question-list { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+  .question-item { padding: 36px 0; border-bottom: 1px solid rgba(251,191,36,0.1); opacity: 0; transform: translateY(24px); animation: fadeInUp 0.7s ease forwards; }
+  .question-item:nth-child(1) { animation-delay: 0.1s; }
+  .question-item:nth-child(2) { animation-delay: 0.25s; }
+  .question-item:nth-child(3) { animation-delay: 0.4s; }
+  .question-item:nth-child(4) { animation-delay: 0.55s; }
+  .question-label { font-size: 13px; color: rgba(251,191,36,0.5); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; font-weight: 500; letter-spacing: 0.08em; }
+  .question-label svg { width: 18px; height: 18px; color: var(--gold-400); }
+  .question-text { font-size: clamp(19px, 2.8vw, 26px); line-height: 1.7; color: rgba(255,251,235,0.85); font-weight: 400; }
+  .question-highlight { color: var(--gold-300); font-weight: 500; }
+
+  .comparison-table { width: 100%; border-collapse: collapse; margin-top: 48px; font-size: 14px; }
+  .comparison-table th { text-align: left; padding: 18px; background: var(--gold-50); font-weight: 600; color: var(--gold-800); border-bottom: 2px solid var(--gold-200); }
+  .comparison-table td { padding: 22px 18px; border-bottom: 1px solid rgba(245,158,11,0.1); color: var(--charcoal); vertical-align: top; line-height: 1.7; }
+  .comparison-table tr:hover td { background: var(--gold-50); }
+  .tag { display: inline-block; padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+  .tag-awake { background: rgba(22,163,74,0.1); color: #15803d; }
+  .tag-sleep { background: rgba(220,38,38,0.08); color: #b91c1c; }
+  .tag-solution { background: rgba(245,158,11,0.1); color: var(--gold-700); }
+  .insight-box { text-align: center; margin-top: 48px; padding: 32px; background: linear-gradient(135deg, var(--gold-50) 0%, var(--cream) 100%); border-radius: 16px; border: 1px solid rgba(245,158,11,0.12); }
+  .insight-box p { font-size: 17px; color: var(--gold-800); line-height: 1.9; }
+  .insight-box strong { color: var(--gold-900); font-weight: 600; }
+
+  .products { background: var(--warm-white); }
+  .product-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 28px; }
+  .product-card { background: white; border: 1px solid rgba(245,158,11,0.1); border-radius: 16px; padding: 36px; transition: all var(--t-normal) var(--ease-standard); position: relative; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.04); }
+  .product-card:hover { border-color: rgba(245,158,11,0.25); box-shadow: 0 12px 40px rgba(245,158,11,0.12); transform: translateY(-4px); }
+  .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold-400) 0%, var(--gold-500) 100%); opacity: 0; transition: opacity var(--t-fast); }
+  .product-card:hover::before { opacity: 1; }
+  .product-step { font-size: 12px; color: var(--gold-500); margin-bottom: 14px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+  .product-name { font-size: 24px; font-weight: 600; margin-bottom: 10px; color: var(--charcoal); }
+  .product-subtitle { font-size: 14px; color: var(--gold-600); margin-bottom: 20px; font-weight: 500; }
+  .product-desc { font-size: 15px; color: var(--charcoal); line-height: 1.8; margin-bottom: 24px; opacity: 0.85; }
+  .product-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .tool-tag { padding: 6px 14px; background: var(--gold-50); border-radius: 8px; font-size: 12px; color: var(--gold-700); font-weight: 500; border: 1px solid rgba(245,158,11,0.1); }
+  .product-awake { padding: 18px; background: linear-gradient(135deg, var(--gold-50) 0%, var(--cream) 100%); border-radius: 12px; font-size: 14px; color: var(--gold-800); line-height: 1.7; margin-bottom: 24px; border-left: 4px solid var(--gold-400); }
+  .product-link { display: inline-flex; align-items: center; gap: 8px; color: var(--gold-700); font-weight: 600; font-size: 14px; text-decoration: none; transition: all var(--t-fast); }
+  .product-link:hover { gap: 12px; color: var(--gold-900); }
+  .product-link svg { width: 16px; height: 16px; }
+
+  .cases { background: linear-gradient(180deg, var(--cream) 0%, var(--warm-white) 100%); }
+  .case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 24px; }
+  .case-card { background: white; border-radius: 16px; padding: 32px; transition: all var(--t-normal); border: 1px solid rgba(245,158,11,0.08); box-shadow: 0 2px 16px rgba(0,0,0,0.03); }
+  .case-card:hover { box-shadow: 0 16px 48px rgba(245,158,11,0.1); transform: translateY(-4px); border-color: rgba(245,158,11,0.15); }
+  .case-company { font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--charcoal); }
+  .case-before, .case-after, .case-result { margin-bottom: 18px; }
+  .case-label { font-size: 12px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .case-label svg { width: 16px; height: 16px; }
+  .case-before .case-label { color: #b91c1c; }
+  .case-after .case-label { color: var(--gold-600); }
+  .case-result .case-label { color: #15803d; }
+  .case-text { font-size: 14px; color: var(--charcoal); line-height: 1.7; opacity: 0.85; }
+  .case-metric { font-size: 28px; font-weight: 600; color: var(--gold-600); margin-top: 10px; font-variant-numeric: tabular-nums; }
+
+  .ai-section { background: var(--warm-white); }
+  .ai-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 24px; }
+  .ai-card { background: white; border: 1px solid rgba(245,158,11,0.1); border-radius: 16px; padding: 32px; transition: all var(--t-normal); box-shadow: 0 2px 12px rgba(0,0,0,0.03); }
+  .ai-card:hover { border-color: var(--gold-300); background: linear-gradient(135deg, white 0%, var(--gold-50) 100%); box-shadow: 0 8px 32px rgba(245,158,11,0.1); transform: translateY(-2px); }
+  .ai-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--gold-100) 0%, var(--gold-200) 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(251,191,36,0.15); }
+  .ai-icon svg { width: 22px; height: 22px; color: var(--gold-700); }
+  .ai-name { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--charcoal); }
+  .ai-desc { font-size: 14px; color: var(--charcoal); line-height: 1.7; opacity: 0.8; }
+  .ai-quote { margin-top: 16px; padding: 14px; background: linear-gradient(135deg, var(--gold-50) 0%, var(--cream) 100%); border-radius: 10px; font-size: 13px; color: var(--gold-700); font-style: italic; border-left: 3px solid var(--gold-400); line-height: 1.7; }
+
+  .founder { background: linear-gradient(180deg, var(--cream) 0%, var(--warm-white) 60%, var(--gold-50) 100%); }
+  .founder-content { max-width: 760px; margin: 0 auto; text-align: center; }
+  .founder-quote { font-size: clamp(17px, 2.2vw, 21px); line-height: 2.2; color: var(--charcoal); margin-bottom: 48px; text-align: left; background: white; padding: 48px; border-radius: 20px; box-shadow: 0 8px 40px rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.1); }
+  .founder-quote p { margin-bottom: 18px; position: relative; padding-left: 32px; }
+  .founder-quote p::before { content: '\25C6'; position: absolute; left: 0; color: var(--gold-400); font-weight: 700; font-size: 14px; top: 2px; }
+  .founder-quote p:last-child { margin-bottom: 0; }
+  .founder-cta { display: inline-flex; align-items: center; gap: 16px; margin-top: 32px; flex-wrap: wrap; justify-content: center; }
+
+  .cta-section { background: linear-gradient(160deg, var(--deep-brown) 0%, #2C1810 50%, #1A1208 100%); color: var(--gold-100); padding: 120px 24px; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(251,191,36,0.08) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .cta-section::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .cta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+  .cta-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(251,191,36,0.12); border-radius: 16px; padding: 36px; transition: all var(--t-normal); backdrop-filter: blur(4px); }
+  .cta-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(251,191,36,0.2); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+  .cta-level { font-size: 12px; color: rgba(251,191,36,0.5); margin-bottom: 14px; font-weight: 600; letter-spacing: 0.1em; }
+  .cta-title { font-size: 22px; font-weight: 600; margin-bottom: 14px; color: var(--gold-200); }
+  .cta-desc { font-size: 14px; color: rgba(255,251,235,0.65); line-height: 1.8; margin-bottom: 28px; }
+  .cta-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--gold-400) 0%, var(--gold-500) 100%); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all var(--t-fast); font-family: inherit; box-shadow: 0 4px 16px rgba(245,158,11,0.3); }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.4); }
+  .cta-btn-outline { background: transparent; color: var(--gold-300); border: 2px solid rgba(251,191,36,0.25); box-shadow: none; }
+  .cta-btn-outline:hover { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.4); box-shadow: 0 4px 16px rgba(245,158,11,0.15); }
+
+  .footer { background: var(--deep-brown); color: var(--gold-100); padding: 80px 24px 48px; text-align: center; position: relative; }
+  .footer::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: linear-gradient(90deg, transparent 0%, var(--gold-400) 50%, transparent 100%); }
+  .footer-brand { font-size: 22px; font-weight: 600; margin-bottom: 20px; color: var(--gold-200); }
+  .footer-oath { max-width: 640px; margin: 0 auto 40px; font-size: 15px; line-height: 2.2; color: rgba(255,251,235,0.55); }
+  .footer-oath strong { color: var(--gold-300); font-weight: 600; }
+  .footer-links { display: flex; gap: 32px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+  .footer-link { color: rgba(251,191,36,0.5); text-decoration: none; font-size: 14px; transition: all var(--t-fast); font-weight: 500; }
+  .footer-link:hover { color: var(--gold-300); }
+  .footer-bottom { border-top: 1px solid rgba(251,191,36,0.08); padding-top: 32px; font-size: 13px; color: rgba(255,251,235,0.35); line-height: 2; }
+
+  .quiz-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26,22,18,0.6); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(8px); }
+  .quiz-overlay.active { display: flex; }
+  .quiz-modal { background: white; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 48px; position: relative; box-shadow: 0 24px 80px rgba(0,0,0,0.2); }
+  .quiz-close { position: absolute; top: 20px; right: 20px; background: none; border: none; cursor: pointer; padding: 10px; color: var(--gold-500); border-radius: 8px; transition: all var(--t-fast); }
+  .quiz-close:hover { background: var(--gold-50); }
+  .quiz-close svg { width: 20px; height: 20px; }
+  .quiz-title { font-size: 26px; font-weight: 600; margin-bottom: 10px; color: var(--charcoal); }
+  .quiz-progress { height: 6px; background: var(--gold-100); border-radius: 3px; margin: 28px 0; overflow: hidden; }
+  .quiz-progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold-400) 0%, var(--gold-500) 100%); border-radius: 3px; transition: width var(--t-normal); }
+  .quiz-question { font-size: 19px; margin-bottom: 28px; line-height: 1.6; color: var(--charcoal); font-weight: 500; }
+  .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+  .quiz-option { padding: 18px; border: 2px solid rgba(245,158,11,0.12); border-radius: 12px; cursor: pointer; transition: all var(--t-fast); font-size: 15px; background: white; text-align: left; font-family: inherit; color: var(--charcoal); font-weight: 500; }
+  .quiz-option:hover { border-color: var(--gold-400); background: linear-gradient(135deg, var(--gold-50) 0%, white 100%); transform: translateX(4px); }
+  .quiz-result { text-align: center; padding: 24px 0; }
+  .quiz-score { font-size: 56px; font-weight: 600; margin-bottom: 10px; color: var(--gold-600); }
+  .quiz-level { font-size: 22px; font-weight: 600; margin-bottom: 20px; color: var(--charcoal); }
+  .quiz-feedback { font-size: 15px; color: var(--charcoal); line-height: 1.8; margin-bottom: 32px; opacity: 0.85; }
+
+  @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+  .fade-in { opacity: 0; transform: translateY(28px); transition: all 0.7s var(--ease-out); }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .mobile-menu-btn { display: block; }
+    .hero-stats { gap: 32px; }
+    .stat-number { font-size: 32px; }
+    .comparison-table { font-size: 12px; }
+    .comparison-table th, .comparison-table td { padding: 14px 10px; }
+    .section { padding: 72px 16px; }
+    .quiz-modal { padding: 28px; }
+    .product-cards, .case-grid, .ai-grid, .cta-grid { grid-template-columns: 1fr; }
+    .founder-quote { padding: 28px; }
+  }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gold-300); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold-400); }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="#" class="nav-brand" onclick="scrollToSection('hero'); return false;">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L8 8L2 9L6 14L5 21L12 18L19 21L18 14L22 9L16 8L12 2Z" fill="currentColor"/></svg>
+    匠合咨询
+  </a>
+  <div class="nav-links">
+    <button class="nav-link" onclick="scrollToSection('awakening')">高维之问</button>
+    <button class="nav-link" onclick="scrollToSection('mirror')">高维之镜</button>
+    <button class="nav-link" onclick="scrollToSection('products')">合伙体系</button>
+    <button class="nav-link" onclick="scrollToSection('cases')">文明实证</button>
+    <button class="nav-link" onclick="scrollToSection('ai')">AI赋能</button>
+    <button class="nav-link" onclick="scrollToSection('founder')">创始人</button>
+    <button class="nav-link" onclick="scrollToSection('cta')">高维之约</button>
+  </div>
+  <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-badge">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></svg>
+    高维合伙 · 文明觉醒 · 以终为始
+  </div>
+  <h1>共建伟大企业<br>觉醒<span>文明之光</span></h1>
+  <p class="hero-subtitle">以终为始，从高维文明出发，设计高维合伙机制。<br>匠合咨询——不做工具的贩卖者，只做<strong>觉醒文明的引路人</strong>。<br><em>先觉醒，后合伙；敬天爱人，利出一孔</em></p>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-number">127</div><div class="stat-label">已唤醒创始人</div></div>
+    <div class="stat-item"><div class="stat-number">30,000+</div><div class="stat-label">影响员工家庭</div></div>
+    <div class="stat-item"><div class="stat-number">19年</div><div class="stat-label">合伙咨询深耕</div></div>
+  </div>
+  <div class="hero-actions">
+    <button class="btn btn-primary" onclick="openQuiz()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 3C16.1944 3 20 6.80558 20 11.5C20 13.523 19.2933 15.381 18.1132 16.8404L21.1364 19.8636C21.4879 20.2151 21.4879 20.7849 21.1364 21.1364C20.7849 21.4879 20.2151 21.4879 19.8636 21.1364L16.8404 18.1132C15.381 19.2933 13.523 20 11.5 20C6.80558 20 3 16.1944 3 11.5C3 6.80558 6.80558 3 11.5 3ZM11.5 18.2C15.2003 18.2 18.2 15.2003 18.2 11.5C18.2 7.79969 15.2003 4.8 11.5 4.8C7.79969 4.8 4.8 7.79969 4.8 11.5C4.8 15.2003 7.79969 18.2 11.5 18.2Z" fill="currentColor"/></svg>
+      测一测：你的企业觉醒度
+    </button>
+    <button class="btn btn-secondary" onclick="scrollToSection('cta')">领取《觉醒企业诊断书》<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</section>
+
+<section class="awakening-questions" id="awakening">
+  <div class="section-header">
+    <div class="section-tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>灵魂拷问</div>
+    <h2 class="section-title">高维之问</h2>
+    <p class="section-desc">如果答案让你沉默——欢迎，高维觉醒从这里开始</p>
+  </div>
+  <div class="question-list">
+    <div class="question-item">
+      <div class="question-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>第一问 · 存在之问</div>
+      <div class="question-text">你的企业，为什么存在？<br>是为了在财报上多一个零，<br>还是为了<span class="question-highlight">让走进你门店的每一个人，感到被尊重？</span></div>
+    </div>
+    <div class="question-item">
+      <div class="question-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>第二问 · 动力之问</div>
+      <div class="question-text">你的员工，凌晨两点为什么还在加班？<br>是因为KPI逼的，<br>还是因为他<span class="question-highlight">真心希望这件事做成？</span></div>
+    </div>
+    <div class="question-item">
+      <div class="question-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>第三问 · 分股之问</div>
+      <div class="question-text">你的股权，分给了谁？<br>是分给了"能帮我赚钱的人"，<br>还是分给了<span class="question-highlight">"愿意与我共建美好社会的人"？</span></div>
+    </div>
+    <div class="question-item">
+      <div class="question-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>第四问 · 启程之问</div>
+      <div class="question-text">如果答案让你沉默——<br><span class="question-highlight">欢迎，觉醒从这里开始。</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="mirror">
+  <div class="section-header">
+    <div class="section-tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>痛点映照</div>
+    <h2 class="section-title">高维之镜</h2>
+    <p class="section-desc">这些不是管理问题，是文明维度问题。低维合伙分的是钱，高维合伙分的是梦</p>
+  </div>
+  <div style="overflow-x: auto;">
+    <table class="comparison-table">
+      <thead><tr><th>表象</th><th>觉醒前的归因</th><th>觉醒后的看见</th><th>合伙之光的落点</th></tr></thead>
+      <tbody>
+        <tr><td><strong>人才老了，技能退化</strong></td><td><span class="tag tag-sleep">"现在年轻人不行"</span></td><td><span class="tag tag-awake">"我是否给了他们成长的意义？"</span></td><td><span class="tag tag-solution">培训合伙：让老员工成为导师，传承即觉醒</span></td></tr>
+        <tr><td><strong>腰部断层，无人可用</strong></td><td><span class="tag tag-sleep">"培养成本太高"</span></td><td><span class="tag tag-awake">"我是否真心希望他们超越我？"</span></td><td><span class="tag tag-solution">裂变合伙：让体长带徒弟，裂变即传承</span></td></tr>
+        <tr><td><strong>中层走了，新人留不住</strong></td><td><span class="tag tag-sleep">"市场太浮躁"</span></td><td><span class="tag tag-awake">"他们在这里，是否感到被尊重？"</span></td><td><span class="tag tag-solution">虚拟股合伙：让人才从"打工"到"股东"</span></td></tr>
+        <tr><td><strong>好人招不来，关键人误用</strong></td><td><span class="tag tag-sleep">"识人太难"</span></td><td><span class="tag tag-awake">"我自己的心，是否足够真诚？"</span></td><td><span class="tag tag-solution">期权合伙：以未来绑定志同道合者</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="insight-box"><p><strong>核心洞察：</strong><br>"这些不是管理问题，是文明维度问题。低维合伙分的是钱，高维合伙分的是梦。<br>觉醒是灯，合伙是梯，文明是顶——灯照亮方向，梯让人攀登，顶让人看见星空。"</p></div>
+</section>
+
+<section class="section products" id="products">
+  <div class="section-header">
+    <div class="section-tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L8 8L2 9L6 14L5 21L12 18L19 21L18 14L22 9L16 8L12 2Z" fill="currentColor"/></svg>产品骨骼</div>
+    <h2 class="section-title">高维合伙 · 三维文明阶梯</h2>
+    <p class="section-desc">以终为始，从高维文明出发，设计可攀、有光、有根的合伙机制</p>
+  </div>
+  <div class="product-cards">
+    <div class="product-card fade-in">
+      <div class="product-step">第一阶 · 创业之光</div>
+      <h3 class="product-name">期权合伙 · 命运共同体</h3>
+      <p class="product-subtitle">适用：初创企业、Pre-IPO企业</p>
+      <p class="product-desc">用未来绑定现在，让联合创始人成为"命运共同体"。不是简单的股权分配，而是让"相信"的人分享"相信"的果实。</p>
+      <div class="product-tools"><span class="tool-tag">期权池设计</span><span class="tool-tag">行权条件</span><span class="tool-tag">动态调整</span><span class="tool-tag">退出机制</span></div>
+      <div class="product-awake"><strong>觉醒落点：</strong>让"相信"的人，分享"相信"的果实</div>
+      <a href="#" class="product-link" onclick="showComingSoon(event)">了解期权合伙方案<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="product-card fade-in">
+      <div class="product-step">第二阶 · 成长之光</div>
+      <h3 class="product-name">虚拟股合伙 · 事业共同体</h3>
+      <p class="product-subtitle">适用：发展期企业，年营收3000万-3亿</p>
+      <p class="product-desc">不用工商变更，让核心骨干成为"事业共同体"。让奋斗者"看得见、摸得着、退不了"。</p>
+      <div class="product-tools"><span class="tool-tag">虚拟股授予</span><span class="tool-tag">利润分红</span><span class="tool-tag">绩效挂钩</span><span class="tool-tag">分期解锁</span></div>
+      <div class="product-awake"><strong>觉醒落点：</strong>让奋斗者"看得见、摸得着、退不了"</div>
+      <a href="#" class="product-link" onclick="showComingSoon(event)">了解虚拟股合伙方案<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="product-card fade-in">
+      <div class="product-step">第三阶 · 裂变之光</div>
+      <h3 class="product-name">划小单元合伙 · 经营共同体</h3>
+      <p class="product-subtitle">适用：成熟期企业，年营收3亿+，需要组织裂变</p>
+      <p class="product-desc">把大公司拆成"小老板"，让一线成为"经营者"。让听得见炮声的人做决策，让创造利润的人分享利润。</p>
+      <div class="product-tools"><span class="tool-tag">经营体划分</span><span class="tool-tag">独立核算</span><span class="tool-tag">利润分享</span><span class="tool-tag">裂变孵化</span></div>
+      <div class="product-awake"><strong>觉醒落点：</strong>让听得见炮声的人做决策，让创造利润的人分享利润</div>
+      <a href="#" class="product-link" onclick="showComingSoon(event)">了解划小单元合伙方案<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<section class="section cases" id="cases">
+  <div class="section-header">
+    <div class="section-tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.3027 5.9053C19.6542 5.55397 20.2247 5.55388 20.5761 5.9053C20.9273 6.25675 20.9273 6.82734 20.5761 7.17874L9.65911 18.0948C9.30773 18.4461 8.73814 18.446 8.38665 18.0948L3.42376 13.1328C3.0726 12.7814 3.07263 12.2118 3.42376 11.8604C3.77524 11.509 4.34575 11.5089 4.6972 11.8604L9.02239 16.1856L19.3027 5.9053Z" fill="currentColor"/></svg>案例实证</div>
+    <h2 class="section-title">文明之证</h2>
+    <p class="section-desc">从"低维困局"到"高维合伙"到"文明之光"</p>
+  </div>
+  <div class="case-grid">
+    <div class="case-card fade-in">
+      <div class="case-company">胖东来</div>
+      <div class="case-before"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>觉醒前</div><div class="case-text">许昌小卖部，于东来负债累累</div></div>
+      <div class="case-after"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L8 8L2 9L6 14L5 21L12 18L19 21L18 14L22 9L16 8L12 2Z" fill="currentColor"/></svg>合伙机制</div><div class="case-text">利润50%分员工，员工变主人</div></div>
+      <div class="case-result"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></svg>文明结果</div><div class="case-text">中国零售业"文明圣地"，顾客感动落泪</div></div>
+    </div>
+    <div class="case-card fade-in">
+      <div class="case-company">匠合·XX纺织</div>
+      <div class="case-before"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>觉醒前</div><div class="case-text">利润目标年年落空，员工躺平</div></div>
+      <div class="case-after"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L8 8L2 9L6 14L5 21L12 18L19 21L18 14L22 9L16 8L12 2Z" fill="currentColor"/></svg>合伙机制</div><div class="case-text">经营合伙人+裂变分红</div></div>
+      <div class="case-result"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></svg>文明结果</div><div class="case-text">员工自发改善，"为自己干"</div><div class="case-metric">利润超额44.5%</div></div>
+    </div>
+    <div class="case-card fade-in">
+      <div class="case-company">匠合·德明汽车</div>
+      <div class="case-before"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>觉醒前</div><div class="case-text">核心人才流失，老板一人扛</div></div>
+      <div class="case-after"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L8 8L2 9L6 14L5 21L12 18L19 21L18 14L22 9L16 8L12 2Z" fill="currentColor"/></svg>合伙机制</div><div class="case-text">虚拟股+事业合伙人</div></div>
+      <div class="case-result"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></svg>文明结果</div><div class="case-text">14位核心成股东，"命运共同体"</div><div class="case-metric">收入增长30%</div></div>
+    </div>
+    <div class="case-card fade-in">
+      <div class="case-company">匠合·碧水水务</div>
+      <div class="case-before"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg>觉醒前</div><div class="case-text">业绩停滞，团队涣散</div></div>
+      <div class="case-after"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L8 8L2 9L6 14L5 21L12 18L19 21L18 14L22 9L16 8L12 2Z" fill="currentColor"/></svg>合伙机制</div><div class="case-text">划小单元+独立核算</div></div>
+      <div class="case-result"><div class="case-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></svg>文明结果</div><div class="case-text">合伙人自发裂变，"生态涌现"</div><div class="case-metric">6500万→1.5亿</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section ai-section" id="ai">
+  <div class="section-header">
+    <div class="section-tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L8 8L2 9L6 14L5 21L12 18L19 21L18 14L22 9L16 8L12 2Z" fill="currentColor"/></svg>AI赋能</div>
+    <h2 class="section-title">高维工具 · AI智能体赋能</h2>
+    <p class="section-desc">不是"我们有AI"，而是"高维文明，需要AI之翼加速落地"</p>
+  </div>
+  <div class="ai-grid">
+    <div class="ai-card fade-in">
+      <div class="ai-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg></div>
+      <h3 class="ai-name">价值观面试官</h3>
+      <p class="ai-desc">让招聘成为觉醒的第一道筛选</p>
+      <div class="ai-quote">"不是问'你能做什么'，而是问'你为什么而活'"</div>
+    </div>
+    <div class="ai-card fade-in">
+      <div class="ai-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg></div>
+      <h3 class="ai-name">绩效面谈助手</h3>
+      <p class="ai-desc">让考核成为觉醒的每一次校准</p>
+      <div class="ai-quote">"不是打分排名，而是问'这一季度，你的心性成长了吗'"</div>
+    </div>
+    <div class="ai-card fade-in">
+      <div class="ai-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg></div>
+      <h3 class="ai-name">股权激励模拟器</h3>
+      <p class="ai-desc">让分股成为觉醒的每一份承诺</p>
+      <div class="ai-quote">"不是算谁该拿多少，而是问'这份股权，是否匹配他的觉醒度'"</div>
+    </div>
+    <div class="ai-card fade-in">
+      <div class="ai-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/></svg></div>
+      <h3 class="ai-name">经营体损益测算</h3>
+      <p class="ai-desc">让核算成为觉醒的每一面镜子</p>
+      <div class="ai-quote">"不是看赚了多少钱，而是问'这笔钱，是否让社会更美好'"</div>
+    </div>
+  </div>
+</section>
+
+<section class="section founder" id="founder">
+  <div class="section-header">
+    <div class="section-tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" fill="currentColor"/><path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" fill="currentColor"/></svg>创始人觉醒</div>
+    <h2 class="section-title">以终为始 · 刘育良的觉醒之路</h2>
+    <p class="section-desc">从高维文明出发，重新定义合伙咨询</p>
+  </div>
+  <div class="founder-content">
+    <div class="founder-quote">
+      <p>我做过19年合伙咨询。</p>
+      <p>前15年，我以为自己在"卖方案"——股权怎么分、绩效怎么考、单元怎么划。都是低维的技术。</p>
+      <p>直到那一天，一位客户问我："刘老师，方案很完美，但为什么我的团队还是像一盘散沙？"</p>
+      <p>我答不上来。</p>
+      <p>后来我去胖东来，站在许昌的卖场里，看见一位保洁阿姨蹲在地上，用抹布一点点擦地砖缝。不是有人监督，是她自己觉得"这地是我的"。</p>
+      <p>那一刻我懂了：合伙不是技术，是信仰；觉醒不是课程，是修行；<strong>而伟大的企业，一定是从高维文明出发，以终为始的合伙。</strong></p>
+      <p>匠合咨询，从此不做"合伙工具的贩卖者"，我们做"觉醒企业的引路人"。</p>
+      <p>这条路，我刚刚开始走。邀请你，一起走。</p>
+    </div>
+    <div class="founder-cta">
+      <button class="btn btn-primary" onclick="showComingSoon(event)">每日修心笔记<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="btn btn-secondary" onclick="showComingSoon(event)">觉醒参访报名</button>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="cta">
+  <div class="section-header" style="margin-bottom: 60px;">
+    <div class="section-tag" style="color: rgba(255,255,255,0.6);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></svg>高维之约</div>
+    <h2 class="section-title" style="color: white;">高维之约</h2>
+    <p class="section-desc" style="color: rgba(255,255,255,0.5);">以终为始，从高维出发，层层深入</p>
+  </div>
+  <div class="cta-grid">
+    <div class="cta-card">
+      <div class="cta-level">邀约一 · 免费</div>
+      <h3 class="cta-title">觉醒初体验</h3>
+      <p class="cta-desc">《觉醒企业自测问卷》——10道题，照见你的企业觉醒度<br><br>《觉醒企业诊断书》——基于答案，生成专属报告</p>
+      <button class="cta-btn" onclick="openQuiz()">立即开始自测</button>
+    </div>
+    <div class="cta-card">
+      <div class="cta-level">邀约二 · 88元</div>
+      <h3 class="cta-title">觉醒同修</h3>
+      <p class="cta-desc">《股权合伙启航班》——不是教你怎么分股权<br><br>是让你先回答：我为什么要分？分给什么样的人？<br><br>含：《高维合伙》实体书 + 3节觉醒视频课</p>
+      <button class="cta-btn cta-btn-outline" onclick="showComingSoon(event)">加入同修</button>
+    </div>
+    <div class="cta-card">
+      <div class="cta-level">邀约三 · 深度陪伴</div>
+      <h3 class="cta-title">觉醒同行</h3>
+      <p class="cta-desc">觉醒企业诊断 → 哲学手册共建 → 合伙机制设计 → 持续陪跑<br><br>仅限年营收1000万-5亿、创始人愿意"先醒后合"的企业<br><br><em style="color: rgba(255,255,255,0.4);">每月限10席</em></p>
+      <button class="cta-btn" onclick="showComingSoon(event)">预约创始人1对1觉醒对话</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">匠合咨询 · 高维合伙 · 文明觉醒 · 以终为始</div>
+  <div class="footer-oath">
+    <strong>我们承诺：</strong><br>
+    不服务发心不正的企业。<br>
+    不设计没有价值观支撑的合伙机制。<br>
+    不把合伙工具卖给只想"收割"的收割者。<br><br>
+    我们的每一页PPT、每一次诊断、每一个方案，<br>
+    都先问一句：<strong>"作为人，何谓正确？"</strong>
+  </div>
+  <div class="footer-links">
+    <a href="#" class="footer-link" onclick="showComingSoon(event)">微信公众号：匠合觉醒</a>
+    <a href="#" class="footer-link" onclick="showComingSoon(event)">视频号：育良觉醒</a>
+    <a href="#" class="footer-link" onclick="showComingSoon(event)">抖音：股权分对人</a>
+    <a href="#" class="footer-link" onclick="showComingSoon(event)">小红书：合伙点燃人</a>
+  </div>
+  <div class="footer-bottom">
+    创始人：刘育良 | 中欧国际工商学院EMBA | 19年合伙咨询 | 8本专著<br><br>
+    "以高维文明之心，建以终为始之制，铸伟大企业之光。"<br><br>
+    每日6:00，觉醒晨钟。每月一期，觉醒参访。每年一本，《中国觉醒企业白皮书》。
+  </div>
+</footer>
+
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-modal">
+    <button class="quiz-close" onclick="closeQuiz()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div id="quizContent"></div>
+  </div>
+</div>
+
+<script>
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) { const offset = 64; const top = el.getBoundingClientRect().top + window.pageYOffset - offset; window.scrollTo({ top, behavior: 'smooth' }); }
+  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
+}
+
+const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+window.addEventListener('scroll', () => {
+  const sections = ['hero','awakening','mirror','products','cases','ai','founder','cta'];
+  const scrollPos = window.scrollY + 100;
+  sections.forEach((id, idx) => {
+    const el = document.getElementById(id);
+    if (el && scrollPos >= el.offsetTop && scrollPos < el.offsetTop + el.offsetHeight) {
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      const navLinks = document.querySelectorAll('.nav-link');
+      if (idx > 0 && navLinks[idx-1]) navLinks[idx-1].classList.add('active');
+    }
+  });
+});
+
+const quizQuestions = [
+  { q: "你的企业使命，员工能一字不差地背出来吗？", options: ["能，而且发自内心认同","能背，但只是口号","大部分能","很少人知道"], scores: [3,1,2,0] },
+  { q: "当公司利润增长时，第一反应是？", options: ["先想怎么分给员工","先想怎么扩大投资","先想股东分红","还没想过"], scores: [3,2,1,0] },
+  { q: "你的核心骨干，凌晨加班是因为？", options: ["真心想把事做好","KPI压力","偶尔自愿","从不加班"], scores: [3,0,2,1] },
+  { q: "过去一年，你主动倾听过基层员工的心声吗？", options: ["经常，每月都有","偶尔，季度一次","很少，一年几次","没有专门做过"], scores: [3,2,1,0] },
+  { q: "你的股权/分红设计，最看重什么？", options: ["价值观匹配度","业绩贡献度","资历年限","还没设计"], scores: [3,2,1,0] },
+  { q: "当客户投诉时，你的第一反应是？", options: ["先反省自己哪里没做好","先找责任人","先安抚客户","看情况处理"], scores: [3,0,2,1] },
+  { q: "你认为企业存在的终极意义是？", options: ["让社会更美好","让员工幸福","让股东赚钱","还没想清楚"], scores: [3,2,1,0] },
+  { q: "过去一年，你读过几本关于'心性'或'经营哲学'的书？", options: ["3本以上","1-2本","翻过几本","一本没读"], scores: [3,2,1,0] },
+  { q: "你的企业有明确的'作为人，何谓正确'的判断标准吗？", options: ["有，而且每天都在用","有，写在墙上","有，但很少提","没有"], scores: [3,2,1,0] },
+  { q: "如果明天公司倒闭，员工会为你流泪吗？", options: ["会，我们是一家人","可能会，关系不错","不确定","不太可能"], scores: [3,2,1,0] }
+];
+
+let currentQuestion = 0, totalScore = 0;
+
+function openQuiz() { currentQuestion = 0; totalScore = 0; document.getElementById('quizOverlay').classList.add('active'); renderQuestion(); }
+function closeQuiz() { document.getElementById('quizOverlay').classList.remove('active'); }
+
+function renderQuestion() {
+  const q = quizQuestions[currentQuestion];
+  const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
+  let html = '<div class="quiz-progress"><div class="quiz-progress-bar" style="width: '+progress+'%"></div></div>';
+  html += '<div style="font-size:13px;color:var(--gold-600);margin-bottom:16px;">问题 '+(currentQuestion+1)+' / '+quizQuestions.length+'</div>';
+  html += '<div class="quiz-question">'+q.q+'</div><div class="quiz-options">';
+  q.options.forEach((opt, i) => { html += '<button class="quiz-option" onclick="answerQuestion('+i+')">'+opt+'</button>'; });
+  html += '</div>';
+  document.getElementById('quizContent').innerHTML = html;
+}
+
+function answerQuestion(optionIndex) {
+  totalScore += quizQuestions[currentQuestion].scores[optionIndex];
+  currentQuestion++;
+  if (currentQuestion < quizQuestions.length) renderQuestion();
+  else showResult();
+}
+
+function showResult() {
+  const maxScore = quizQuestions.length * 3;
+  const percentage = Math.round((totalScore / maxScore) * 100);
+  let level, feedback;
+  if (percentage >= 80) { level = "觉醒之光"; feedback = "恭喜你，你的企业已经走在觉醒的路上。员工与你同心，使命清晰如昼。下一步，建议将觉醒之心通过合伙机制固化，让光变成可以传递的火种。"; }
+  else if (percentage >= 60) { level = "觉醒萌芽"; feedback = "你已经有了觉醒的意识，但还需要更深的扎根。建议从'经营哲学共建'开始，让发心不只是你一个人的事，变成全公司的共识。"; }
+  else if (percentage >= 40) { level = "沉睡之中"; feedback = "你的企业还在传统的管理逻辑里运转。这不是批评，是大多数企业的常态。但觉醒的第一步，就是承认'我还睡着'。建议从'觉醒企业诊断'开始。"; }
+  else { level = "深度沉睡"; feedback = "你可能从未想过'企业为什么存在'这个问题。但没关系，觉醒永远不晚。建议先读一本《活法》或《心》，然后预约一次觉醒对话。"; }
+  document.getElementById('quizContent').innerHTML = '<div class="quiz-result"><div class="quiz-score">'+percentage+'<span style="font-size:24px;">分</span></div><div class="quiz-level">'+level+'</div><div class="quiz-feedback">'+feedback+'</div><button class="btn btn-primary" onclick="closeQuiz()" style="width:100%;justify-content:center;">领取诊断书，开启觉醒之路</button></div>';
+}
+
+document.getElementById('quizOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('quizOverlay')) closeQuiz(); });
+function showComingSoon(e) { e.preventDefault(); alert('即将上线，敬请期待！'); }
+function toggleMobileMenu() { alert('移动端菜单功能开发中，请使用桌面端浏览完整导航。'); }
+</script>
+</body>
+</html>
